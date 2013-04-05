@@ -19,3 +19,6 @@ artists in the Echo Nest database.  This app shows:
  * Popular songs (via the dynamic playlist API)
 
 
+The demo is online here:  http://static.echonest.com/echotron/
+
+
