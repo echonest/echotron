@@ -6,6 +6,7 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     <script src="https://rdio.com/api/api.js?client_id=O6AaGOhuj-J9rKck49gQMw"></script>
+<script type="text/javascript" src="http://static.echonest.com/demo/common/get_key_with_callback.js"></script>
     <link href="styles.css" rel="stylesheet">
   </head>
 
@@ -167,7 +168,7 @@
 <script type="text/javascript">
 
 jQuery.ajaxSettings.traditional = true; 
-var api_key = 'FHPFXUKUGHZWWUXPR';
+var api_key = 'TD7VKGDVLCHB7ZKL6';
 
 var standardBuckets = [ 'biographies', 'hotttnesss', 'familiarity', 'images', 'artist_location', 'reviews', 'terms', 'urls', 'video', 'years_active', 'doc_counts', 'songs']; 
 
@@ -234,7 +235,7 @@ function fetchNextTrack() {
     var url = 'http://developer.echonest.com/api/v4/playlist/dynamic/next';
 
     var args = { 
-        api_key : 'FHPFXUKUGHZWWUXPR',
+        api_key : api_key,
         session_id : session_id,
         results: 1,
         lookahead: 5,
@@ -257,9 +258,10 @@ function createDynamicPlaylist(artist) {
 
     var args = {
         'artist': artist, 
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'bucket': [ 'id:rdio-US', 'tracks'], 'limit' : true,
         'type':'artist',
+        'sort' :'song_hotttnesss-desc',
         'dmca': false
     };
 
@@ -657,7 +659,7 @@ function fetchArtistInfoByName(name) {
     var url = 'http://developer.echonest.com/api/v4/artist/search';
 
     var args = {
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'name' : name,
         'bucket': standardBuckets,
         'results' : 1,
@@ -687,7 +689,7 @@ function fetchArtistInfoByID(id) {
     var url = 'http://developer.echonest.com/api/v4/artist/profile';
 
     var args = {
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'id' : id,
         'bucket': standardBuckets,
     };
@@ -712,7 +714,7 @@ function fetchSimilars(id) {
 
     var args = {
         'id': id, 
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'results' : 30,
     };
 
@@ -735,7 +737,7 @@ function fetchNews(id, relevant) {
 
     var args = {
         'id': id, 
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'high_relevance' : relevant
     };
 
@@ -764,7 +766,7 @@ function fetchBlogs(id, relevant) {
 
     var args = {
         'id': id, 
-        'api_key' : 'FHPFXUKUGHZWWUXPR',
+        'api_key' : api_key,
         'high_relevance' : relevant
     };
 
@@ -918,6 +920,10 @@ $(document).ready(function() {
     var trackStartTime = now();
 
     $.ajaxSetup( {cache: false});
+
+    fetchApiKey( function(apiKey, isLoggedIn) {
+        api_key = apiKey;
+    });
 
     initUI();
     R.ready(function() {
