@@ -142,7 +142,7 @@
 
       <div class="row-fluid">
       </div>
-      <div class="row-fluid">
+      <div id="news-div" class="row-fluid">
         <div class="span4">
           <h3>Recent News</h3>
           <div id="news" class="card"> </div>
@@ -539,6 +539,7 @@ function formatBlog(item) {
 
 
 function showNews(news) {
+    $("#news-div").show();
     var div = $("#news");
     div.empty();
     if (news && news.length > 0) {
@@ -553,6 +554,7 @@ function showNews(news) {
 
 function showReviews(reviews) {
     var div = $("#reviews");
+    $("#news-div").show();
     div.empty();
     if (reviews && reviews.length > 0) {
         $.each(reviews, function(index, article) {
@@ -566,6 +568,7 @@ function showReviews(reviews) {
 
 function showBlogs(blogs) {
     var div = $("#blogs");
+    $("#news-div").show();
     div.empty();
     if (blogs && blogs.length > 0) {
         $.each(blogs, function(index, article) {
@@ -661,7 +664,6 @@ function showArtist(artist) {
     showReviews(artist.reviews);
     showImages(artist.images);
     showDocCounts(artist.doc_counts);
-
     stuffArtistInURL(artist);
 }
 

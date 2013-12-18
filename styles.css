@@ -79,6 +79,10 @@ body {
 #no-artist {
 }
 
+#news-div {
+    display:none;
+}
+
 .card {
     overflow:hidden;
 }
