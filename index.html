@@ -133,8 +133,9 @@
           <div id="similar-artists"> </div>
         </div>
         <div class="span6">
-          <h3>Top Terms</h3>
-          <div id="top-terms"> </div>
+          <h3 id="top-genre-header">Top Genres</h3>
+          <div id="top-genres"> </div>
+       </div>
        </div>
       </div>
 
@@ -170,13 +171,15 @@
 jQuery.ajaxSettings.traditional = true; 
 var api_key = 'TD7VKGDVLCHB7ZKL6';
 
-var standardBuckets = [ 'biographies', 'hotttnesss', 'familiarity', 'images', 'artist_location', 'reviews', 'terms', 'urls', 'video', 'years_active', 'doc_counts', 'songs']; 
+var standardBuckets = [ 'biographies', 'hotttnesss', 'familiarity', 'images', 'artist_location', 'reviews', 'terms', 'urls', 'video',
+'years_active', 'doc_counts', 'songs', 'id:facebook', 'id:twitter', 'genre']; 
 
 var allImages = null;
 var curImage = 0;
 
 var allVideos = null;
 var curVideo = 0;
+var deferredSong = null;
 
 function info(s) {
     $("#info").removeClass();
@@ -217,9 +220,13 @@ function hasTrack(song) {
 function playSong(song) {
     if (hasTrack(song)) {
         var rdioID = getRdioID(song);
-        R.player.play({
-            source: rdioID
-        });
+        if (R.player) {
+            R.player.play({
+                source: rdioID
+            });
+        } else {
+            deferredSong = song;
+        }
     }
     $("#rp-song-title").text(song.title);
     $("#rp-artist-name").text(song.artist_name);
@@ -405,7 +412,8 @@ function showSimilarArtists(sims) {
 
 function showTopTerms(artist) {
     var maxTerms = 32;
-    var div = $("#top-terms");
+    $("#top-genre-header").text("Top Terms");
+    var div = $("#top-genres");
     div.empty();
     $.each(artist.terms, function(i, term) {
         if (i < maxTerms) {
@@ -416,6 +424,20 @@ function showTopTerms(artist) {
             }
         }
     });
+}
+
+function showTopGenres(artist) {
+    $("#top-genre-header").text("Top Genres");
+    var div = $("#top-genres");
+    div.empty();
+    $.each(artist.genres, function(i, genre ) {
+        var tspan = $("<span>").text(genre.name);
+        div.append(tspan);
+        if (i < artist.genres.length - 1) {
+            div.append($("<span>").text(", "));
+        }
+    });
+    return artist.genres.length;
 }
 
 function showURLs(artist) {
@@ -630,7 +652,10 @@ function showArtist(artist) {
     $("#no-artist").hide();
     showInfo(artist);
     showBio(artist);
-    showTopTerms(artist);
+
+    if (showTopGenres(artist) == 0) {
+        showTopTerms(artist);
+    }
     showURLs(artist);
     showVideos(artist.video);
     showReviews(artist.reviews);
@@ -965,8 +990,12 @@ $(document).ready(function() {
         });
 
         console.log('rdio ready');
-        processParams();
+        if (deferredSong) {
+            playSong(deferredSong);
+            deferredSong = null;
+        }
     });
+    processParams();
 });
 
 </script>
